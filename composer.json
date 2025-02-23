@@ -1,0 +1,13 @@
+{
+    "require": {
+        "google/apiclient": "^2.18"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        },
+        "files": [
+            "src/google-auth-config/google_config.php"
+        ]
+    }
+}

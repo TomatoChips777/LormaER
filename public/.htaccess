@@ -1,0 +1,10 @@
+ErrorDocument 404 /LormaER/public/404.php
+
+RewriteEngine On
+RewriteBase /LormaER/public/
+
+# If the requested file or directory doesn't exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+# Redirect to 404.php
+RewriteRule ^ 404.php [L]
