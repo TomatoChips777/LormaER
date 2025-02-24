@@ -19,36 +19,6 @@ Session::start();
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
     <!-- <script src="/new_project/node_modules/chart.js/dist/chart.umd.js"></script> -->
     <!-- Custom CSS -->
-    <style>
-    /* Active page button styles */
-    .page-item.active .page-link {
-        background-color: rgb(33, 37, 41); /* Dark background for active button */
-        color: #fff; /* White text color for active button */
-        border-color: #343a40; /* Dark border for active button */
-    }
-
-    /* Default link style */
-    .page-item .page-link {
-        color: black; /* Default text color for page links */
-    }
-
-    /* Hover and Focus states */
-    .page-item .page-link:hover, 
-    .page-item .page-link:focus {
-        color: #fff; /* Text color should be white on hover/focus */
-        background-color: black; /* Black background on hover/focus */
-        border-color: #343a40; /* Dark border for consistency */
-    }
-
-    /* Ensure active page maintains dark styling on hover/focus */
-    .page-item.active .page-link:hover, 
-    .page-item.active .page-link:focus {
-        background-color: rgb(33, 37, 41); /* Keep active page background dark */
-        color: #fff; /* Keep the text white */
-        border-color: #343a40; /* Keep the border dark */
-    }
-</style>
-
-
-
+    <link rel="stylesheet" href="/LormaER/public/assets/css/custom-css.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>

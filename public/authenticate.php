@@ -25,8 +25,11 @@ if($user->google_login($userInfo->email, $userInfo->name, $userInfo->picture)) {
     $role = Session::get('role');
     if($role === 'admin') {
         header('Location: users/admin/dashboard.php');
-    } else {
+    } elseif($role === 'student') {
         header('Location: users/student/dashboard.php');
+    }else{
+        $user->logout();
+        header('Location: login.php');
     }
     exit();
 

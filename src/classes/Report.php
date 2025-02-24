@@ -1,7 +1,7 @@
 <?php
 require_once 'Database.php';
 require_once 'Session.php';
-
+require_once 'Notification.php';
 class Report
 {
     private $database;
@@ -46,18 +46,34 @@ class Report
         }
     }
 
+
     // public function createReport($location, $issueType, $description, $imagePath)
     // {
     //     try {
-
     //         $userId = Session::get('id');
+    //         $userName = Session::get('name');
 
+    //         // Insert report
     //         $stmt = $this->db->prepare("INSERT INTO {$this->table} (user_id, location, issue_type, description, image_path) VALUES (?, ?, ?, ?, ?)");
     //         $stmt->execute([$userId, $location, $issueType, $description, $imagePath]);
 
+    //         // Fetch the newly inserted report ID
+    //         $reportId = $this->db->lastInsertId();
+
+    //         // Create a notification for admin (assuming admin ID is 1)
+    //         $notification = new Notification();
+    //         $message = "New report submitted by {$userName} - {$issueType} issue at {$location}";
+    //         $notification->createNotification($userId, $reportId, $message);
+
+    //         // Fetch the new report data
+    //         $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE id = ?");
+    //         $stmt->execute([$reportId]);
+    //         $newReport = $stmt->fetch(PDO::FETCH_ASSOC);
+
     //         return [
     //             'success' => true,
-    //             'message' => 'Report submitted successfully'
+    //             'message' => 'Report submitted successfully',
+    //             'report' => $newReport
     //         ];
     //     } catch (PDOException $e) {
     //         error_log("Report creation error: " . $e->getMessage());
@@ -143,7 +159,7 @@ class Report
             $result = $stmt->execute([$status, $reportId]);
 
             return [
-                'success' => $result,
+                'success' => true,
                 'message' => $result ? 'Status updated successfully' : 'Failed to update status'
             ];
         } catch (PDOException $e) {
@@ -154,6 +170,22 @@ class Report
             ];
         }
     }
+
+    public function getReportById($reportId)
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT r.*, u.name as user_name 
+                                      FROM {$this->table} r 
+                                      JOIN tbl_users u ON r.user_id = u.id 
+                                      WHERE r.id = ?");
+            $stmt->execute([$reportId]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Get report error: " . $e->getMessage());
+            return null;
+        }
+    }
+
     public function updateReport($reportId, $location, $issueType, $description, $imagePath, $user_id)
     {
         try {

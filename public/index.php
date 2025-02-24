@@ -3,7 +3,9 @@ require_once __DIR__ . '/../config.php';
 require_once CLASSES_PATH . 'Database.php';
 require_once CLASSES_PATH . 'User.php';
 require_once CLASSES_PATH . 'Session.php';
+require_once ROOT_PATH . '/src/google-auth-config/google_config.php';
 
+$url = $client->createAuthUrl();
 Session::start();
 
 // If the user is already logged in, redirect based on their role
@@ -58,7 +60,7 @@ if (Session::get('id')) {
 
             <div class="mt-5">
                 <!-- Login button -->
-                <a href="login.php" class="btn btn-dark btn-lg">Login to Report Issues</a>
+                <a href="<?= $url ?>" class="btn btn-dark btn-lg">Login to Report Issues</a>
             </div>
         </div>
     </div>

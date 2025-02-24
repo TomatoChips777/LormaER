@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../../../config.php';
 require_once CLASSES_PATH . 'Session.php';
 require_once CLASSES_PATH . 'Report.php';
+require_once CLASSES_PATH . 'Notification.php';
 
 // Check if user is logged in
 Session::start();
@@ -59,6 +60,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Fetch status counts
     $statusCount = $report->getReportStatusCount($user_id);
     if ($result['success']) {
+        // Create notification for admin
+        $notification = new Notification();
+        $studentName = Session::get('name');
+        $notificationMessage = "New report submitted by {$studentName} - {$issueType} issue at {$location}";
+        $notification->createNotification(1, $notificationMessage); // Assuming admin user_id is 1
+        
         // Assuming the createReport function returns the new report ID and other details
         $newReport = $result['report']; // This should contain the new report data like ID, location, etc.
         

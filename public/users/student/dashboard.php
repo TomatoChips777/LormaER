@@ -132,7 +132,7 @@ if (!Session::isLoggedIn() || Session::get('role') !== 'student') {
                                 <th>Issue Type</th>
                                 <th>Description</th>
                                 <th>Status</th>
-                                <th>Actions</th>
+                                <th width="17%">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="reportsTableBody">

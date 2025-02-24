@@ -21,7 +21,7 @@ Session::requireAdmin();
     ?>
 
 
-    <div class="container py-3">
+    <div class="container-fluid py-3">
         <!-- Welcome Section -->
         <div class="row mb-4">
             <div class="col-12">
@@ -42,7 +42,7 @@ Session::requireAdmin();
         </div>
 
         <!-- Quick Stats -->
-        <div class="row mb-4">
+        <div class="row mb-4" >
             <div class="col-md-4 mb-3">
                 <div class="card h-100 border-0 shadow-sm ">
                     <div class="card-body">
@@ -58,7 +58,7 @@ Session::requireAdmin();
                             <option value="last_year">Last Year</option>
                         </select>
                         <canvas id="issueChart" height="270"></canvas>
-                        <a href="reports_page.php" class="btn btn-primary  text-decoration-none">Check Reports</a>
+                        <!-- <a href="reports_page.php" class="btn btn-primary  text-decoration-none">Check Reports</a> -->
                     </div>
 
                 </div>
@@ -105,16 +105,15 @@ Session::requireAdmin();
     <script src="../../assets/js/bootstrap.bundle.min.js"></script>
 
     <!-- Load jQuery first -->
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- DataTables JS -->
-    <!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script> -->
 
     <!--  Custom script -->
     <!-- <script src="js/status_report.js"></script> -->
 
     <!--  Custom script -->
-    <!-- <script src="js/dashboard.js"></script> -->
+    <script src="ajax/dashboard.js"></script>
 
     <!--  Custom script -->
 

@@ -18,7 +18,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <a class="nav-link ajax-link <?= $current_page === 'dashboard.php' ? 'active' : '' ?>" href="dashboard.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link ajax-link <?= $current_page === 'view_users.php' ? 'active' : '' ?>" href="view_users.php">User Management</a>
+                        <a class="nav-link ajax-link <?= $current_page === 'users-page.php' ? 'active' : '' ?>" href="users-page.php">User Management</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link ajax-link <?= $current_page === 'reports-page.php' ? 'active' : '' ?>" href="reports-page.php">Reports</a>
@@ -35,6 +35,18 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </li>
                 <?php endif; ?>
             </ul>
+
+            <li class="nav-item dropdown me-3">
+                <a class="nav-link dropdown-toggle text-white position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bell"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notificationCount">
+                        0
+                    </span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="notificationDropdown" id="notificationList" style="width: 300px; max-height: 400px; overflow-y: auto;">
+                    <li class="text-center"><small>No new notifications</small></li>
+                </ul>
+            </li>
 
             <?php if (Session::isLoggedIn()): ?>
                 <div class="dropdown me-3">
@@ -54,8 +66,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </ul>
                 </div>
             <?php endif; ?>
-            
-            
+
+
         </div>
     </div>
 </nav>

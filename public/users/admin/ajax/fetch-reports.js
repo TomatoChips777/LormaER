@@ -24,21 +24,21 @@ $(document).ready(function() {
             tableBody.empty();
 
             if (!response.data || response.data.length === 0) {
-                tableBody.append(`
+                tableBody.append(
                     <tr>
                         <td colspan="7" class="text-center py-4">
                             <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
                             No reports found
                         </td>
                     </tr>
-                `);
+                );
                 return;
             }
 
             response.data.forEach(report => {
                 // console.log('Processing report:', report);
-                const row = `
-                    <tr data-status="${report.status}" data-report-id="${report.id}">
+                const row = 
+                    `<tr data-status="${report.status}" data-report-id="${report.id}">
                         <td>${report.date}</td>
                         <td>${report.reporter_name}</td>
                         <td>${report.location}</td>
@@ -62,9 +62,10 @@ $(document).ready(function() {
                             </div>
                         </td>
                     </tr>
-                `;
+                ;`
                 tableBody.append(row);
 
+                 // Append modal content dynamically for each report
                  // Append modal content dynamically for each report
                  const modalContent = `
                  <div class="modal fade" id="viewReportModal${report.id}" tabindex="-1" aria-labelledby="viewReportModalLabel${report.id}" aria-hidden="true">
@@ -110,41 +111,50 @@ $(document).ready(function() {
              $('body').append(modalContent);
             });
 
+            updateStats(response.stats);
+
             // Update pagination
             const pagination = $('#pagination');
             pagination.empty();
 
             const totalPages = response.pages;
-            $('#totalRecords').text(`Showing ${response.data.length} of ${response.total} records`);
+            $('#totalRecords').text(Showing ${response.data.length} of ${response.total} records);
 
             // Previous button
-            pagination.append(`
+            pagination.append(
                 <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
                     <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
                 </li>
-            `);
+            );
 
             // Page numbers
             for (let i = 1; i <= totalPages; i++) {
-                pagination.append(`
+                pagination.append(
                     <li class="page-item ${currentPage === i ? 'active' : ''}">
                         <a class="page-link " href="#" data-page="${i}">${i}</a>
                     </li>
-                `);
+                );
             }
 
             // Next button
-            pagination.append(`
+            pagination.append(
                 <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
                     <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
                 </li>
-            `);
+            );
         }).fail(function(jqXHR, textStatus, errorThrown) {
             console.error('AJAX Error:', textStatus, errorThrown);
             console.log('Response:', jqXHR.responseText);
         });
     }
 
+
+    // Update stats in the quick stats section
+    function updateStats(stats) {
+        $('#pendingCount').text(stats.pending);
+        $('#inProgressCount').text(stats.in_progress);
+        $('#resolvedCount').text(stats.resolved);
+    }
     // Initial load
     loadReports();
 
@@ -183,15 +193,91 @@ $(document).ready(function() {
         const reportId = $(this).data('report-id');
         const newStatus = $(this).val();
         
-        $.post('update_report_status.php', {
+        $.post('backend/update-report-status.php', {
             report_id: reportId,
             status: newStatus
         }, function(response) {
+            console.log('Response:', response);
             if (response.success) {
+                alert("Status updated successfully!");
                 loadReports();
             } else {
                 alert('Failed to update status');
             }
         });
     });
+
+
+    function fetchNotifications() {
+        $.ajax({
+            url: 'backend/fetch-notifications.php',
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                let notificationList = $("#notificationList");
+                let notificationCount = $("#notificationCount");
+                let unreadCount = 0;
+
+                notificationList.empty();
+                if (data.length > 0) {
+                    console.log("New notifications received:", data.length);
+                    
+                    data.forEach(notification => {
+                        if (!notification.is_read) {
+                            unreadCount++;
+                        }
+                        
+                        notificationList.append(
+                            <li>
+                                <a class="dropdown-item ${notification.is_read ? 'text-muted' : 'fw-bold'}" href="#" data-id="${notification.id}">
+                                    <div class="small text-muted">${notification.formatted_date}</div>
+                                    ${notification.message}
+                                </a>
+                            </li>
+                        );
+                    });
+
+                    notificationCount.text(unreadCount);
+                    if (unreadCount > 0) {
+                        notificationCount.show();
+                    } else {
+                        notificationCount.hide();
+                    }
+                } else {
+                    console.log("No notifications.");
+                    notificationCount.hide();
+                    notificationList.append('<li class="text-center"><small>No notifications</small></li>');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Failed to fetch notifications:", error);
+            }
+        });
+    }
+
+    // Handle notification click
+    $(document).on('click', '#notificationList a', function(e) {
+        e.preventDefault();
+        let notificationId = $(this).data('id');
+        let $this = $(this);
+        
+        // Mark notification as read
+        $.ajax({
+            url: 'backend/mark-notification-read.php',
+            method: 'POST',
+            data: { notification_id: notificationId },
+            success: function() {
+                $this.removeClass('fw-bold').addClass('text-muted');
+                let count = parseInt($("#notificationCount").text()) - 1;
+                if (count <= 0) {
+                    $("#notificationCount").hide();
+                } else {
+                    $("#notificationCount").text(count);
+                }
+            }
+        });
+    });
+
+    fetchNotifications();
+    setInterval(fetchNotifications, 1000); // Check every 30 seconds
 });

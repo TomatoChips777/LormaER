@@ -105,7 +105,7 @@ $(document).ready(function() {
     // Update stats in the quick stats section
     function updateStats(stats) {
         $('#pendingCount').text(stats.pending);
-        $('#inProgressCount').text(stats.inProgress);
+        $('#inProgressCount').text(stats.in_progress);
         $('#resolvedCount').text(stats.resolved);
     }
     // Initial load

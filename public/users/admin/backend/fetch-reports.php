@@ -24,6 +24,8 @@ $report = new Report();
 $reports = $report->getPaginatedReports($status, $search, $limit, $offset);
 $total = $report->getTotalReports($status, $search);
 
+$statusCount = $report->getAllReportStatusCount();
+
 // Debug output
 error_log("Reports returned: " . print_r($reports, true));
 error_log("Total records: $total");
@@ -51,6 +53,11 @@ if (!empty($reports)) {
     }
 }
 
+$statusStats = [];
+foreach ($statusCount as $status) {
+    $statusStats[$status['status']] = $status['count'];
+}
+
 // Debug final output
 error_log("Final JSON data: " . json_encode([
     'data' => $data,
@@ -63,5 +70,6 @@ header('Content-Type: application/json');
 echo json_encode([
     'data' => $data,
     'total' => $total,
-    'pages' => ceil($total / $limit)
+    'pages' => ceil($total / $limit),
+    'stats' => $statusStats,
 ]);

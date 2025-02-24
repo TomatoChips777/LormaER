@@ -24,7 +24,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white <?= $current_page === 'view_users.php' ? 'active' : '' ?>" href="view_users.php">
+          <a class="nav-link text-white <?= $current_page === 'users-page.php' ? 'active' : '' ?>" href="users-page.php">
             <i class="bi bi-people"></i> User Management
           </a>
         </li>
