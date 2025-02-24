@@ -36,12 +36,12 @@ class Notification
         try {
             // Get the current user's ID
             // $userId = Session::get('id');
-            // $limit = 5;
-            // $stmt = $this->db->prepare("SELECT n.*, DATE_FORMAT(n.created_at, '%M %d, %Y %h:%i %p') as formatted_date 
-            //                           FROM {$this->table} n 
-            //                           ORDER BY n.created_at DESC 
-            //                           LIMIT ?");
-            $stmt = $this->db->prepare("SELECT * FROM {$this->table} ");
+            $limit = 5;
+            $stmt = $this->db->prepare("SELECT n.*, DATE_FORMAT(n.created_at, '%M %d, %Y %h:%i %p') as formatted_date 
+                                      FROM {$this->table} n WHERE is_read = 0
+                                      ORDER BY n.created_at DESC 
+                                      LIMIT 5");
+            // $stmt = $this->db->prepare("SELECT * FROM {$this->table} ");
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

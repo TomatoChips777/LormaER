@@ -36,17 +36,21 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <?php endif; ?>
             </ul>
 
-            <li class="nav-item dropdown me-3">
-                <a class="nav-link dropdown-toggle text-white position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-bell"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notificationCount">
-                        0
-                    </span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="notificationDropdown" id="notificationList" style="width: 300px; max-height: 400px; overflow-y: auto;">
-                    <li class="text-center"><small>No new notifications</small></li>
-                </ul>
-            </li>
+            <li class="nav-item dropdown me-3" style="list-style: none;">
+    <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="position-relative">
+            <i class="bi bi-bell fs-5"></i> 
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notificationCount" style="font-size: 0.75rem; padding: 4px 6px;">
+                0
+            </span>
+        </div>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end shadow-lg p-2" aria-labelledby="notificationDropdown" id="notificationList">
+        <li class="text-center text-muted py-2"><small>No new notifications</small></li>
+    </ul>
+</li>
+
+
 
             <?php if (Session::isLoggedIn()): ?>
                 <div class="dropdown me-3">

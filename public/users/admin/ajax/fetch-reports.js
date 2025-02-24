@@ -25,12 +25,12 @@ $(document).ready(function() {
 
             if (!response.data || response.data.length === 0) {
                 tableBody.append(
-                    <tr>
+                    `<tr>
                         <td colspan="7" class="text-center py-4">
                             <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
                             No reports found
                         </td>
-                    </tr>
+                    </tr>`
                 );
                 return;
             }
@@ -61,54 +61,51 @@ $(document).ready(function() {
                                 </button>
                             </div>
                         </td>
-                    </tr>
-                ;`
+                    </tr>`;
                 tableBody.append(row);
 
-                 // Append modal content dynamically for each report
-                 // Append modal content dynamically for each report
-                 const modalContent = `
-                 <div class="modal fade" id="viewReportModal${report.id}" tabindex="-1" aria-labelledby="viewReportModalLabel${report.id}" aria-hidden="true">
-                     <div class="modal-dialog modal-lg">
-                         <div class="modal-content">
-                             <div class="modal-header">
-                                 <h5 class="modal-title" id="viewReportModalLabel${report.id}">Report Details</h5>
-                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                             </div>
-                             <div class="modal-body">
-                                 <div class="mb-3">
-                                     <h5>Location:</h5>
-                                     <p>${report.location}</p>
-                                 </div>
-                                 <div class="mb-3">
-                                     <h5>Issue Type:</h5>
-                                     <p>${report.issue_type}</p>
-                                 </div>
-                                 <div class="mb-3">
-                                     <h5>Description:</h5>
-                                     <p>${report.description}</p>
-                                 </div>
-                                 <div class="mb-3">
-                                     <h5>Status:</h5>
-                                     <span class="badge bg-${report.status}">
-                                         ${report.status}
-                                     </span>
-                                 </div>
-                                 ${report.image_path ? `
-                                     <div class="mb-3">
-                                         <h5>Attached Image:</h5>
-                                         <img src="../${report.image_path}" alt="Report Image" class="img-fluid">
-                                     </div>
-                                 ` : ''}
-                             </div>
-                             <div class="modal-footer">
-                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-             `;
-             $('body').append(modalContent);
+                // Append modal content dynamically for each report
+                const modalContent = `
+                    <div class="modal fade" id="viewReportModal${report.id}" tabindex="-1" aria-labelledby="viewReportModalLabel${report.id}" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="viewReportModalLabel${report.id}">Report Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <h5>Location:</h5>
+                                        <p>${report.location}</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h5>Issue Type:</h5>
+                                        <p>${report.issue_type}</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h5>Description:</h5>
+                                        <p>${report.description}</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h5>Status:</h5>
+                                        <span class="badge bg-${report.status}">
+                                            ${report.status}
+                                        </span>
+                                    </div>
+                                    ${report.image_path ? `
+                                        <div class="mb-3">
+                                            <h5>Attached Image:</h5>
+                                            <img src="../${report.image_path}" alt="Report Image" class="img-fluid">
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                $('body').append(modalContent);
             });
 
             updateStats(response.stats);
@@ -118,29 +115,29 @@ $(document).ready(function() {
             pagination.empty();
 
             const totalPages = response.pages;
-            $('#totalRecords').text(Showing ${response.data.length} of ${response.total} records);
+            $('#totalRecords').text(`Showing ${response.data.length} of ${response.total} records`);
 
             // Previous button
             pagination.append(
-                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
                     <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
-                </li>
+                </li>`
             );
 
             // Page numbers
             for (let i = 1; i <= totalPages; i++) {
                 pagination.append(
-                    <li class="page-item ${currentPage === i ? 'active' : ''}">
+                    `<li class="page-item ${currentPage === i ? 'active' : ''}">
                         <a class="page-link " href="#" data-page="${i}">${i}</a>
-                    </li>
+                    </li>`
                 );
             }
 
             // Next button
             pagination.append(
-                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
                     <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
-                </li>
+                </li>`
             );
         }).fail(function(jqXHR, textStatus, errorThrown) {
             console.error('AJAX Error:', textStatus, errorThrown);
@@ -148,13 +145,13 @@ $(document).ready(function() {
         });
     }
 
-
     // Update stats in the quick stats section
     function updateStats(stats) {
         $('#pendingCount').text(stats.pending);
         $('#inProgressCount').text(stats.in_progress);
         $('#resolvedCount').text(stats.resolved);
     }
+
     // Initial load
     loadReports();
 
@@ -206,7 +203,7 @@ $(document).ready(function() {
             }
         });
     });
-
+    let lastNotificationCount = 0; // Store previous count
 
     function fetchNotifications() {
         $.ajax({
@@ -217,36 +214,49 @@ $(document).ready(function() {
                 let notificationList = $("#notificationList");
                 let notificationCount = $("#notificationCount");
                 let unreadCount = 0;
-
-                notificationList.empty();
+        
+                notificationList.empty(); // Clear the list before appending new items
+        
                 if (data.length > 0) {
-                    console.log("New notifications received:", data.length);
-                    
                     data.forEach(notification => {
                         if (!notification.is_read) {
                             unreadCount++;
                         }
-                        
+        
+                        // Include `data-report-id` for navigation
                         notificationList.append(
-                            <li>
-                                <a class="dropdown-item ${notification.is_read ? 'text-muted' : 'fw-bold'}" href="#" data-id="${notification.id}">
-                                    <div class="small text-muted">${notification.formatted_date}</div>
-                                    ${notification.message}
+                            `<li class="p-2 border-bottom">
+                                <a href="#" class="mark-as-read d-block text-decoration-none ${notification.is_read ? 'text-muted' : 'fw-bold'}" 
+                                   data-id="${notification.id}" 
+                                   data-report-id="${notification.report_id}">
+                                    <div class="card shadow-sm p-2">
+                                        <div class="d-flex align-items-start">
+                                            <img src="assets/profile-placeholder.png" class="rounded-circle me-2" width="40" height="40" alt="User">
+                                            <div>
+                                                <p class="mb-1">${notification.message}</p>
+                                                <small class="text-muted">${notification.formatted_date}</small>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </a>
-                            </li>
+                            </li>`
                         );
                     });
-
+    
                     notificationCount.text(unreadCount);
-                    if (unreadCount > 0) {
-                        notificationCount.show();
-                    } else {
-                        notificationCount.hide();
+                    notificationCount.toggle(unreadCount > 0); // Show/hide count
+    
+                    // 🔄 **Refresh the table if new notifications are detected**
+                    if (unreadCount > lastNotificationCount) {
+                        console.log("New notifications detected, refreshing table...");
+                        loadReports(); // Reload reports
                     }
+    
+                    // Update the last known notification count
+                    lastNotificationCount = unreadCount;
                 } else {
-                    console.log("No notifications.");
+                    notificationList.append('<li class="text-center text-muted py-2"><small>No notifications</small></li>');
                     notificationCount.hide();
-                    notificationList.append('<li class="text-center"><small>No notifications</small></li>');
                 }
             },
             error: function (xhr, status, error) {
@@ -254,30 +264,117 @@ $(document).ready(function() {
             }
         });
     }
+    
+    // function fetchNotifications() {
+    //     $.ajax({
+    //         url: 'backend/fetch-notifications.php',
+    //         method: 'GET',
+    //         dataType: 'json',
+    //         success: function (data) {
+    //             let notificationList = $("#notificationList");
+    //             let notificationCount = $("#notificationCount");
+    //             let unreadCount = 0;
+    
+    //             notificationList.empty(); // Clear the list before appending new items
+    
+    //             if (data.length > 0) {
+    //                 data.forEach(notification => {
+    //                     if (!notification.is_read) {
+    //                         unreadCount++;
+    //                     }
+    
+    //                     // Include `data-report-id` for navigation
+    //                     notificationList.append(
+    //                         `<li class="p-2 border-bottom">
+    //                             <a href="#" class="mark-as-read d-block text-decoration-none ${notification.is_read ? 'text-muted' : 'fw-bold'}" 
+    //                                data-id="${notification.id}" 
+    //                                data-report-id="${notification.report_id}">
+    //                                 <div class="card shadow-sm p-2">
+    //                                     <div class="d-flex align-items-start">
+    //                                         <img src="assets/profile-placeholder.png" class="rounded-circle me-2" width="40" height="40" alt="User">
+    //                                         <div>
+    //                                             <p class="mb-1">${notification.message}</p>
+    //                                             <small class="text-muted">${notification.formatted_date}</small>
+    //                                         </div>
+    //                                     </div>
+    //                                 </div>
+    //                             </a>
+    //                         </li>`
+    //                     );
+    //                 });
+    
+    //                 notificationCount.text(unreadCount);
+    //                 notificationCount.toggle(unreadCount > 0); // Show/hide count
+    //             } else {
+    //                 notificationList.append('<li class="text-center text-muted py-2"><small>No notifications</small></li>');
+    //                 notificationCount.hide();
+    //             }
+    //         },
+    //         error: function (xhr, status, error) {
+    //             console.error("Failed to fetch notifications:", error);
+    //         }
+    //     });
+    // }
+    
 
-    // Handle notification click
-    $(document).on('click', '#notificationList a', function(e) {
+    $(document).on('click', '.mark-as-read', function (e) {
         e.preventDefault();
+    
         let notificationId = $(this).data('id');
+        let reportId = $(this).data('report-id');
         let $this = $(this);
-        
-        // Mark notification as read
+        let notificationItem = $this.closest("li"); // Find the closest parent `<li>`
+    
+        if (!notificationId || !reportId) {
+            console.error("Missing notification or report ID.");
+            return;
+        }
+    
+        // Mark notification as read in the backend
         $.ajax({
             url: 'backend/mark-notification-read.php',
             method: 'POST',
             data: { notification_id: notificationId },
-            success: function() {
-                $this.removeClass('fw-bold').addClass('text-muted');
-                let count = parseInt($("#notificationCount").text()) - 1;
-                if (count <= 0) {
-                    $("#notificationCount").hide();
-                } else {
-                    $("#notificationCount").text(count);
+            success: function () {
+                console.log("Notification marked as read:", notificationId);
+    
+                // Remove the notification from the list
+                notificationItem.fadeOut(300, function () {
+                    $(this).remove();
+                    
+                    // Update unread count
+                    let count = parseInt($("#notificationCount").text()) - 1;
+                    if (count <= 0) {
+                        $("#notificationCount").hide();
+                    } else {
+                        $("#notificationCount").text(count);
+                    }
+                    
+                    // If no notifications left, show "No notifications" message
+                    if ($("#notificationList li").length === 0) {
+                        $("#notificationList").append('<li class="text-center text-muted py-2"><small>No notifications</small></li>');
+                    }
+                });
+    
+                // 🔹 Scroll to the report in the table
+                let reportRow = $(`tr[data-report-id="${reportId}"]`);
+                if (reportRow.length) {
+                    $('html, body').animate({
+                        scrollTop: reportRow.offset().top - 100
+                    }, 800);
+    
+                    // Highlight the row for visibility
+                    reportRow.addClass('table-warning');
+                    setTimeout(() => reportRow.removeClass('table-warning'), 2000);
                 }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error marking notification as read:", error);
             }
         });
     });
+    
 
     fetchNotifications();
-    setInterval(fetchNotifications, 1000); // Check every 30 seconds
+    setInterval(fetchNotifications, 30000); // Check every 30 seconds
 });

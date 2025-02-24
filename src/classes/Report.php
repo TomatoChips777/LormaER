@@ -14,66 +14,28 @@ class Report
         $this->db = $this->database->getConnection();
     }
 
-    public function createReport($location, $issueType, $description, $imagePath)
-    {
-        try {
-            $userId = Session::get('id');
-
-            // Prepare and execute the insertion query
-            $stmt = $this->db->prepare("INSERT INTO {$this->table} (user_id, location, issue_type, description, image_path) VALUES (?, ?, ?, ?, ?)");
-            $stmt->execute([$userId, $location, $issueType, $description, $imagePath]);
-
-            // Fetch the ID of the last inserted report (auto-generated)
-            $reportId = $this->db->lastInsertId();
-
-            // Fetch the newly created report data
-            $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE id = ?");
-            $stmt->execute([$reportId]);
-            $newReport = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            // Return the report data along with the success message
-            return [
-                'success' => true,
-                'message' => 'Report submitted successfully',
-                'report' => $newReport // Return the new report's data
-            ];
-        } catch (PDOException $e) {
-            error_log("Report creation error: " . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Failed to submit report. Please try again.'
-            ];
-        }
-    }
-
-
     // public function createReport($location, $issueType, $description, $imagePath)
     // {
     //     try {
     //         $userId = Session::get('id');
-    //         $userName = Session::get('name');
 
-    //         // Insert report
+    //         // Prepare and execute the insertion query
     //         $stmt = $this->db->prepare("INSERT INTO {$this->table} (user_id, location, issue_type, description, image_path) VALUES (?, ?, ?, ?, ?)");
     //         $stmt->execute([$userId, $location, $issueType, $description, $imagePath]);
 
-    //         // Fetch the newly inserted report ID
+    //         // Fetch the ID of the last inserted report (auto-generated)
     //         $reportId = $this->db->lastInsertId();
 
-    //         // Create a notification for admin (assuming admin ID is 1)
-    //         $notification = new Notification();
-    //         $message = "New report submitted by {$userName} - {$issueType} issue at {$location}";
-    //         $notification->createNotification($userId, $reportId, $message);
-
-    //         // Fetch the new report data
+    //         // Fetch the newly created report data
     //         $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE id = ?");
     //         $stmt->execute([$reportId]);
     //         $newReport = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    //         // Return the report data along with the success message
     //         return [
     //             'success' => true,
     //             'message' => 'Report submitted successfully',
-    //             'report' => $newReport
+    //             'report' => $newReport // Return the new report's data
     //         ];
     //     } catch (PDOException $e) {
     //         error_log("Report creation error: " . $e->getMessage());
@@ -83,6 +45,44 @@ class Report
     //         ];
     //     }
     // }
+
+
+    public function createReport($location, $issueType, $description, $imagePath)
+    {
+        try {
+            $userId = Session::get('id');
+            $userName = Session::get('name');
+
+            // Insert report
+            $stmt = $this->db->prepare("INSERT INTO {$this->table} (user_id, location, issue_type, description, image_path) VALUES (?, ?, ?, ?, ?)");
+            $stmt->execute([$userId, $location, $issueType, $description, $imagePath]);
+
+            // Fetch the newly inserted report ID
+            $reportId = $this->db->lastInsertId();
+
+            // Create a notification for admin (assuming admin ID is 1)
+            $notification = new Notification();
+            $message = "New report submitted by {$userName} - {$issueType} issue at {$location}";
+            $notification->createNotification($userId, $reportId, $message);
+
+            // Fetch the new report data
+            $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE id = ?");
+            $stmt->execute([$reportId]);
+            $newReport = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return [
+                'success' => true,
+                'message' => 'Report submitted successfully',
+                'report' => $newReport
+            ];
+        } catch (PDOException $e) {
+            error_log("Report creation error: " . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Failed to submit report. Please try again.'
+            ];
+        }
+    }
 
     public function getReportsByUser($userId)
     {

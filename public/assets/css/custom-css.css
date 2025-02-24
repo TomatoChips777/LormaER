@@ -25,3 +25,10 @@
     color: #fff; /* Keep the text white */
     border-color: #343a40; /* Keep the border dark */
 }
+
+
+#notificationList {
+    width: 350px; /* Adjust width as needed */
+    max-height: 300px; /* Fixed height to enable scrolling */
+    overflow-y: auto; /* Scroll when too many notifications */
+}

@@ -60,15 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Fetch status counts
     $statusCount = $report->getReportStatusCount($user_id);
     if ($result['success']) {
-        // Create notification for admin
-        $notification = new Notification();
-        $studentName = Session::get('name');
-        $notificationMessage = "New report submitted by {$studentName} - {$issueType} issue at {$location}";
-        $notification->createNotification(1, $notificationMessage); // Assuming admin user_id is 1
         
         // Assuming the createReport function returns the new report ID and other details
         $newReport = $result['report']; // This should contain the new report data like ID, location, etc.
-        
         $newReport['created_at'] = date('M d, Y', strtotime($newReport['created_at']));
         // Prepare the status counts for response
         $statusStats = [];
