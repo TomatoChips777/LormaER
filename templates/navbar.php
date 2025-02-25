@@ -1,8 +1,6 @@
 <?php
 // require_once '../src/classes/Session.php';
-Session::start();
 
-$current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <nav class="navbar navbar-expand-lg bg-success navbar-dark sticky-top" >
     <div class="container-fluid">

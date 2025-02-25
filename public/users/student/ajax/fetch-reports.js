@@ -203,6 +203,7 @@ $(document).ready(function() {
     
                     if (unreadCount > lastNotificationCount) {
                         loadReports();
+                        // updateStats(data.stats);
                     }
                     
                     lastNotificationCount = unreadCount;
@@ -229,7 +230,7 @@ $(document).ready(function() {
             console.error("Missing notification or report ID.");
             return;
         }
-    
+
         $.ajax({
             url: 'backend/mark-notification-read.php',
             method: 'POST',
@@ -248,6 +249,7 @@ $(document).ready(function() {
                     if ($("#notificationList li").length === 0) {
                         $("#notificationList").append('<li class="text-center text-muted py-2"><small>No notifications</small></li>');
                     }
+
                 });
     
                 let reportRow = $(`tr[data-report-id="${reportId}"]`);

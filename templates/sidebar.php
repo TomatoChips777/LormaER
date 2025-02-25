@@ -3,38 +3,38 @@
         <h1 class="fs-10 d-none d-sm-inline"></h1>
     </a>
 
-    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+    <ul class="navbar-nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
         <!-- User Profile Section -->
         <!-- Navigation Links -->
         <?php if (Session::get('role') === 'admin'): ?>
             <li class="nav-item">
-                <a class="nav-link text-white <?= $current_page === 'dashboard.php' ? 'active' : '' ?>" href="dashboard.php">
+                <a class="nav-link ajax-link <?= $current_page === 'dashboard.php' ? 'active' : '' ?>" href="dashboard.php">
                     <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white <?= $current_page === 'users-page.php' ? 'active' : '' ?>" href="users-page.php">
+                <a class="nav-link ajax-link <?= $current_page === 'users-page.php' ? 'active' : '' ?>" href="users-page.php">
                     <i class="bi bi-people"></i> User Management
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white <?= $current_page === 'reports-page.php' ? 'active' : '' ?>" href="reports-page.php">
+                <a class="nav-link ajax-link <?= $current_page === 'reports-page.php' ? 'active' : '' ?>" href="reports-page.php">
                     <i class="bi bi-clipboard-data"></i> Reports
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white <?= $current_page === 'lost_found.php' ? 'active' : '' ?>" href="lost_found.php">
+                <a class="nav-link ajax-link <?= $current_page === 'lost_found.php' ? 'active' : '' ?>" href="lost_found.php">
                     <i class="bi bi-search"></i> Lost & Found
                 </a>
             </li>
         <?php elseif (Session::get('role') === 'student'): ?>
             <li class="nav-item">
-                <a class="nav-link text-white <?= $current_page === 'dashboard.php' ? 'active' : '' ?>" href="dashboard.php">
+                <a class="nav-link ajax-link <?= $current_page === 'dashboard.php' ? 'active' : '' ?>" href="dashboard.php">
                     <i class="bi bi-house-door"></i> Dashboard
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white <?= $current_page === 'lost_found.php' ? 'active' : '' ?>" href="lost_found.php">
+                <a class="nav-link ajax-link <?= $current_page === 'lost_found.php' ? 'active' : '' ?>" href="lost_found.php">
                     <i class="bi bi-search"></i> Lost & Found
                 </a>
             </li>

@@ -1,6 +1,9 @@
 <?php
 require_once dirname(__DIR__) . '../src/classes/Session.php';
 Session::start();
+// Session::start();
+
+$current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
 <head>
