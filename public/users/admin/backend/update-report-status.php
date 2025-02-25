@@ -32,7 +32,7 @@ if ($result['success']) {
         $notification = new Notification();
         $statusText = str_replace('_', ' ', ucfirst($status)); // Convert in_progress to In progress
         $notificationMessage = "Your report about {$reportDetails['issue_type']} at {$reportDetails['location']} has been marked as {$statusText}";
-        $notification->createNotification($reportDetails['user_id'], $notificationMessage);
+        $notification->createNotification($reportDetails['user_id'],$reportId, $notificationMessage);
     }
 }
 

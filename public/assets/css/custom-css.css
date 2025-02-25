@@ -32,3 +32,25 @@
     max-height: 300px; /* Fixed height to enable scrolling */
     overflow-y: auto; /* Scroll when too many notifications */
 }
+
+/* Sidebar styles */
+.sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* Custom scrollbar for sidebar */
+.sticky::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sticky::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sticky::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+}

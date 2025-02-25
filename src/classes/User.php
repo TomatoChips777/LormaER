@@ -37,9 +37,8 @@ class User
             Session::set('role', $user['role']);
             Session::set('image_path', $picture);
             return true;
-        } catch (PDOexception $e) {
-            error_log("Google login error: " . $e->getMessage());
-            return false;
+        } catch (PDOException $e) {
+            throw new Exception("Google login error");
         }
     }
 
@@ -61,8 +60,7 @@ class User
             }
             return false;
         } catch (PDOException $e) {
-            error_log("Login error: " . $e->getMessage());
-            return false;
+            throw new Exception("Login error");
         }
     }
 
@@ -84,8 +82,7 @@ class User
 
             return ['success' => true, 'message' => 'Registration successful'];
         } catch (PDOException $e) {
-            error_log("Registration error: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Registration failed'];
+            throw new Exception("Registration error");
         }
     }
 
@@ -104,8 +101,7 @@ class User
             $stmt->execute([$id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Get user error: " . $e->getMessage());
-            return false;
+            throw new Exception("Get user error");
         }
     }
 
@@ -116,8 +112,7 @@ class User
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Get students error: " . $e->getMessage());
-            return false;
+            throw new Exception("Get students error");
         }
     }
 
@@ -128,8 +123,7 @@ class User
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Get user error: " . $e->getMessage());
-            return false;
+            throw new Exception("Get user error");
         }
     }
     public function getPaginatedUsers($role = 'all', $search = '', $limit = 10, $offset = 0)
@@ -166,14 +160,9 @@ class User
             LIMIT $limit OFFSET $offset
         ";
 
-            error_log("Final SQL Query: " . $query);
-            error_log("Parameters: " . print_r($params, true));
-
             $stmt = $this->db->prepare($query);
             $stmt->execute($params);
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            error_log("Query result count: " . count($result));
 
             if (count($result) === 0) {
                 // Execute a test query to verify data exists
@@ -181,18 +170,15 @@ class User
                 $testStmt = $this->db->prepare($testQuery);
                 $testStmt->execute();
                 $testResult = $testStmt->fetch(PDO::FETCH_ASSOC);
-                error_log("Test query total records: " . $testResult['total']);
 
-                error_log("No results found. Last SQL error: " . print_r($stmt->errorInfo(), true));
+                if ($testResult['total'] === 0) {
+                    return [];
+                }
             }
 
             return $result;
         } catch (PDOException $e) {
-            error_log("Get paginated users error: " . $e->getMessage());
-            error_log("SQL State: " . $e->errorInfo[0]);
-            error_log("Error Code: " . $e->errorInfo[1]);
-            error_log("Error Message: " . $e->errorInfo[2]);
-            return [];
+            throw new Exception("Get paginated users error");
         }
     }
 
@@ -223,8 +209,7 @@ class User
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return $result ? $result['total'] : 0;
         } catch (PDOException $e) {
-            error_log("Get total users error: " . $e->getMessage());
-            return false;
+            throw new Exception("Get total users error");
         }
     }
 
@@ -248,8 +233,7 @@ class User
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Get report status count error: " . $e->getMessage());
-            return [];
+            throw new Exception("Get report status count error");
         }
     }
 
@@ -265,11 +249,7 @@ class User
                 'message' => $result ? "User role updated successfully" : "Failed to update user's role"
             ];
         } catch (PDOException $e) {
-            error_log("Update user role error: " . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Failed to update role'
-            ];
+            throw new Exception("Update user role error");
         }
     }
 }

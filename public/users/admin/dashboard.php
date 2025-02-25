@@ -10,45 +10,36 @@ if(!Session::isLoggedIn()){
 Session::requireAdmin();
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <?php require_once TEMPLATES_PATH . 'head.php'; ?>
 
-<body class="bg-light">
-    <?php 
-    require_once TEMPLATES_PATH . 'navbar.php';
-    require_once TEMPLATES_PATH . 'sidebar.php';
-    ?>
-
-
-    <div class="container-fluid py-3">
-        <!-- Welcome Section -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card bg-success text-white">
-                    <div class="card-body p-4">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <i class="bi bi-tools display-4"></i>
-                            </div>
-                            <div class="col">
-                                <h2 class="mb-0">Maintenance Reports Dashboard</h2>
-                                <p class="mb-0">Manage and respond to campus maintenance reports</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<body>
+    <div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar (hidden on small screens) -->
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-success d-none d-lg-block">
+            <?php require_once TEMPLATES_PATH . 'sidebar.php'; ?>
         </div>
 
-        <!-- Quick Stats -->
-        <div class="row mb-4" >
-            <div class="col-md-4 mb-3">
-                <div class="card h-100 border-0 shadow-sm ">
-                    <div class="card-body">
-                        <h3 class="mb-1 text-center">Reports Chart</h3>
-                        <!-- Date filter dropdown -->
-                        <label for="dateFilter">Filter by:</label>
+        <!-- Main Content -->
+        <div class="col">
+            <?php require_once TEMPLATES_PATH . 'navbar.php'; ?>
+
+            <div class="container-fluid text-center">
+                <div class="row align-items-start">
+                    <!-- Content Goes Here -->
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="d-flex p-5 justify-content-center">
+                <div class="card me-5">
+                    <div id="consultation_chart" style="max-width: 600px; margin: 35px;">
+                    <label for="dateFilter">Filter by:</label>
                         <select id="dateFilter" class="form-select">
                             <option value="current_week">This Week</option>
                             <option value="current_year">Current Year</option>
@@ -58,17 +49,15 @@ Session::requireAdmin();
                             <option value="last_year">Last Year</option>
                         </select>
                         <canvas id="issueChart" height="270"></canvas>
-                        <!-- <a href="reports_page.php" class="btn btn-primary  text-decoration-none">Check Reports</a> -->
                     </div>
-
-                </div>
-            </div>
-            
-            <div class="col-md-4 mb-3">
-                <div data-filter-card="in_progress" class="card h-100 border-0 shadow-sm ">
                     <div class="card-body">
-                        <h3 class="mb-1 text-center">Report Status Summary</h3>
-                        <label for="reportTypeFilter">Filter by:</label>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div id="diagnostic_chart" style="max-width: 600px; margin: 35px;">
+                    <label for="reportTypeFilter">Filter by:</label>
                         <select id="reportTypeFilter" class="form-select">
                             <option value="all">ALL</option>
                             <option value="plumbing">Plumbing Issue</option>
@@ -76,31 +65,19 @@ Session::requireAdmin();
                             <option value="structural">Structural Damage</option>
                             <option value="cleaning">Cleaning Required</option>
                             <option value="safety">Safety Concern</option>
-                            <option value="other">Other</option>
+                            <option style="max-width: 600px; margin: 35px;">Other</option>
                         </select>
                         <canvas id="reportChart"></canvas>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <a data-filter-card="resolved" class="card h-100 border-0 shadow-sm ">
                     <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0 me-3">
-                                <div class="bg-success bg-opacity-10 p-3 rounded">
-                                    <i class="bi bi-check-circle text-success fs-4"></i>
-                                </div>
-                            </div>
-                            <div>
-                                <h6 class="mb-1">Resolved</h6>
-
-                            </div>
-                        </div>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
     </div>
+</div>
+
 
     <script src="../../assets/js/bootstrap.bundle.min.js"></script>
 
@@ -114,6 +91,7 @@ Session::requireAdmin();
 
     <!--  Custom script -->
     <script src="ajax/dashboard.js"></script>
+    <script src="ajax/fetch-reports.js"></script>
 
     <!--  Custom script -->
 

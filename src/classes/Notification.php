@@ -6,7 +6,8 @@ class Notification
 {
     private $database;
     private $db;
-    private $table = 'tbl_notifications';
+    private $tableAdminNotif = 'tbl_admin_notifications';
+    private $tableUserNotif = 'tbl_user_notifications';
 
     public function __construct()
     {
@@ -15,49 +16,72 @@ class Notification
     }
 
     public function createNotification($userId, $reportId, $message)
-    {
+    {   
+        $userRole = Session::get('role');
         try {
-            $stmt = $this->db->prepare("INSERT INTO {$this->table} (user_id, report_id, message) VALUES (?, ?, ?)");
-            $result = $stmt->execute([$userId,$reportId, $message]);
+            if($userRole == 'admin'){ 
+                $query = "INSERT INTO {$this->tableUserNotif} (user_id, report_id, message) VALUES (?, ?, ?)";
+                $params = [$userId,$reportId, $message];
+            }else{ 
+                $query = "INSERT INTO {$this->tableAdminNotif} (user_id, report_id, message) VALUES (?, ?, ?)";
+                $params = [$userId,$reportId, $message];
+            }
+
+            $stmt = $this->db->prepare($query);
+            $result = $stmt->execute($params);
             
             if (!$result) {
-                error_log("Failed to insert notification. Error info: " . print_r($stmt->errorInfo(), true));
-                return false;
+                throw new Exception("Failed to insert notification");
             }
             return true;
         } catch (PDOException $e) {
-            error_log("Notification creation error: " . $e->getMessage());
-            return false;
+            throw new Exception("Failed to insert notification");
         }
     }
 
     public function getNotifications()
     {
+        $userRole = Session::get('role');
+        $userId = Session::get('id');
         try {
-            // Get the current user's ID
-            // $userId = Session::get('id');
-            $limit = 5;
-            $stmt = $this->db->prepare("SELECT n.*, DATE_FORMAT(n.created_at, '%M %d, %Y %h:%i %p') as formatted_date 
-                                      FROM {$this->table} n WHERE is_read = 0
-                                      ORDER BY n.created_at DESC 
-                                      LIMIT 5");
-            // $stmt = $this->db->prepare("SELECT * FROM {$this->table} ");
-            $stmt->execute();
+            if($userRole == 'admin'){ 
+                
+                $query = "SELECT n.*, DATE_FORMAT(n.created_at, '%M %d, %Y %h:%i %p') as formatted_date 
+                FROM {$this->tableAdminNotif} n WHERE is_read = 0
+                ORDER BY n.created_at DESC";
+                $params = [];
+            }else{ 
+                $query = "SELECT n.*, DATE_FORMAT(n.created_at, '%M %d, %Y %h:%i %p') as formatted_date 
+                FROM {$this->tableUserNotif} n WHERE is_read = 0 AND user_id = ?
+                ORDER BY n.created_at DESC";
+                $params = [$userId];
+            }
+
+            $stmt = $this->db->prepare($query);
+            $stmt->execute($params);
+
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Notification fetch error: " . $e->getMessage());
-            return [];
+            throw new Exception("Failed to fetch notifications");
         }
     }
 
     public function markAsRead($notificationId)
     {
+        $userRole = Session::get('role');
         try {
-            $stmt = $this->db->prepare("UPDATE {$this->table} SET is_read = 1 WHERE id = ?");
-            return $stmt->execute([$notificationId]);
+            if($userRole == 'admin'){
+                $query = "UPDATE {$this->tableAdminNotif} SET is_read = 1 WHERE id = ?";
+                $params = [$notificationId];
+            }else{
+                $query = "UPDATE {$this->tableUserNotif} SET is_read = 1 WHERE id = ?";
+                $params = [$notificationId];
+            }
+            $stmt = $this->db->prepare($query);
+            $stmt->execute($params);
+            return true;
         } catch (PDOException $e) {
-            error_log("Mark notification as read error: " . $e->getMessage());
-            return false;
+            throw new Exception("Failed to mark notification as read");
         }
     }
 }

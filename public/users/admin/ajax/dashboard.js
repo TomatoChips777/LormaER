@@ -45,7 +45,7 @@ function fetchReports(filter) {
                     }
                 });
             } else {
-                console.error("Failed to fetch reports:", data.message);
+                // console.error("Failed to fetch reports:", data.message);
             }
         })
         .catch(error => console.error("Error fetching reports:", error));

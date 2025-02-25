@@ -21,4 +21,7 @@ Session::start();
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/LormaER/public/assets/css/custom-css.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+    </style>
+
 </head>

@@ -54,30 +54,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Create report
-    $report = new Report();
-    $result = $report->createReport($location, $issueType, $description, $imagePath);
-    
-    // Fetch status counts
-    $statusCount = $report->getReportStatusCount($user_id);
-    if ($result['success']) {
+    try {
+        $report = new Report();
+        $result = $report->createReport($location, $issueType, $description, $imagePath);
         
-        // Assuming the createReport function returns the new report ID and other details
-        $newReport = $result['report']; // This should contain the new report data like ID, location, etc.
-        $newReport['created_at'] = date('M d, Y', strtotime($newReport['created_at']));
-        // Prepare the status counts for response
-        $statusStats = [];
-        foreach ($statusCount as $status) {
-            $statusStats[$status['status']] = $status['count'];
+        // Fetch status counts
+        $statusCount = $report->getReportStatusCount($user_id);
+        
+        if ($result['success']) {
+            // Format the date for display
+            $result['report']['created_at'] = date('M d, Y', strtotime($result['report']['created_at']));
+            
+            // Prepare the status counts for response
+            $statusStats = [];
+            foreach ($statusCount as $status) {
+                $statusStats[$status['status']] = $status['count'];
+            }
+            
+            // Set proper headers
+            header('Content-Type: application/json');
+            
+            // Send success response
+            echo json_encode([
+                'success' => true,
+                'message' => 'Report submitted successfully',
+                'report' => $result['report'],
+                'stats' => $statusStats
+            ]);
+        } else {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => $result['message'] ?? 'Failed to submit report'
+            ]);
         }
-        // ob_clean();
+    } catch (Exception $e) {
+        header('Content-Type: application/json');
+        http_response_code(500);
         echo json_encode([
-            'success' => true,
-            'message' => 'Report submitted successfully',
-            'report' => $newReport,  // Return new report data
-            'stats' => $statusStats   // Return the status counts
+            'success' => false,
+            'message' => 'An error occurred while submitting the report'
         ]);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Failed to submit report']);
     }
 
     exit();
